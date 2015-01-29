@@ -536,8 +536,13 @@ Notation "x * y" := (mult x y)
                        (at level 40, left associativity) 
                        : nat_scope.
 
+Notation "x ** y" := (exp x y)
+                       (at level 36, left associativity)
+                       : nat_scope.
+
 Check ((0 + 1) + 1).
 
+Compute (8 ** 2).
 (** (The [level], [associativity], and [nat_scope] annotations
    control how these notations are treated by Coq's parser.  The
    details are not important, but interested readers can refer to the
@@ -593,15 +598,14 @@ Proof. reflexivity.  Qed.
     yielding a [b]oolean.  Instead of making up a new [Fixpoint] for
     this one, define it in terms of a previously defined function. *)
 
-Definition blt_nat (n m : nat) : bool :=
-  (* FILL IN HERE *) admit.
+Definition blt_nat (n m : nat) : bool := andb (ble_nat n m) (negb (beq_nat n m)). 
 
 Example test_blt_nat1:             (blt_nat 2 2) = false.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 Example test_blt_nat2:             (blt_nat 2 4) = true.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 Example test_blt_nat3:             (blt_nat 4 2) = false.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 
 (** [] *)
 
