@@ -748,7 +748,7 @@ Theorem plus_id_exercise : forall n m o : nat,
   n = m -> m = o -> n + m = m + o.
 Proof.
   intros n m o H_n_eq_m H_m_eq_o.
-  rewrite H_m_eq_o.
+  rewrite H_n_eq_m. rewrite H_m_eq_o.
   reflexivity.
 Qed.
 (** [] *)
@@ -780,7 +780,11 @@ Theorem mult_S_1 : forall n m : nat,
   m = S n -> 
   m * (1 + n) = m * m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n m H_m_eq_Sn.
+  rewrite -> H_m_eq_Sn.
+  reflexivity.
+Qed.
+  
 (** [] *)
 
 
