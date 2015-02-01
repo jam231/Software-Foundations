@@ -1031,8 +1031,15 @@ Fixpoint plus' (n : nat) (m : nat) : nat :=
     [Fixpoint] definition (of a simple function on numbers, say) that
     _does_ terminate on all inputs, but that Coq will reject because
     of this restriction. *)
+(** Ackermann function
+Fixpoint A(m n : nat) := 
+  match m,n with
+    0, _ => n + 1
+    _, 0 => A (m - 1) 1
+    m, n => A (m - 1) (A m (n - 1))
+  end. 
 
-(* FILL IN HERE *)
+*)
 (** [] *)
 
 (** $Date: 2014-12-31 15:31:47 -0500 (Wed, 31 Dec 2014) $ *)
