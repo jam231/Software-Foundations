@@ -287,16 +287,21 @@ Fixpoint double (n:nat) :=
 
 Lemma double_plus : forall n, double n = n + n .
 Proof.  
-  (* FILL IN HERE *) Admitted.
+  intros n.
+  induction n as [O | n'].
+  Case "n = 0".
+    reflexivity.
+  Case "n = S n'".
+    simpl double. rewrite IHn'. simpl. rewrite plus_n_Sm. reflexivity.
 (** [] *)
 
 
 (** **** Exercise: 1 star (destruct_induction)  *)
 (** Briefly explain the difference between the tactics
-    [destruct] and [induction].  
-
-(* FILL IN HERE *)
-
+    [destruct] and [induction].  *)
+(* 
+   Destruct generates subgoal for every form of term (inductive or co-inductive (?))
+   but does not give out any propositons on subterms unline induction with its induction hypothesis.
 *)
 (** [] *)
 
