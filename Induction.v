@@ -391,7 +391,15 @@ Proof.
 Theorem plus_swap : forall n m p : nat, 
   n + (m + p) = m + (n + p).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n m p.
+  assert (H: n + m = m + n).
+    Case "Proof of assertion H.".
+      rewrite plus_comm. reflexivity.
+  rewrite plus_assoc.
+  rewrite H.
+  rewrite <- plus_assoc.
+  reflexivity.
+Qed.
 
 
 (** Now prove commutativity of multiplication.  (You will probably
@@ -399,11 +407,48 @@ Proof.
     in the proof of this one.)  You may find that [plus_swap] comes in
     handy. *)
 
+Theorem mult_dist_plus :
+  forall n m p, n * (m + p) = n * m + n * p.
+Proof.
+  intros n.
+  induction n as [O | n'].
+   Case "n = 0".
+    simpl. intros m p. reflexivity. 
+  Case "n = S n'".
+    intros m p.
+    simpl. rewrite IHn'.
+    rewrite plus_swap with (m := n' * m) (p := n' * p) (n := m + p).
+    rewrite -> plus_assoc with (n := n' * m) (m := m + p) (p := n' * p).
+    rewrite plus_assoc with (n := n' * m) (m := m) (p := p).
+    rewrite plus_comm with (n := n' * m).
+    rewrite <- plus_assoc with (n := m + n' * m) (m := p) (p := n' * p).
+    reflexivity.
+Admitted.
+
+
 Theorem mult_comm : forall m n : nat,
  m * n = n * m.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros m.
+  induction m as [O | m'].
+    Case "m = 0".
+     simpl. intros n.  rewrite mult_0_r. reflexivity. 
+    Case "m = S m'". 
+      intros n. simpl. rewrite IHm'.
+      assert (H: n * S m' = n * (m' + 1)).
+        rewrite plus_comm. reflexivity.
+      rewrite H. rewrite mult_dist_plus.
+      rewrite plus_comm.
+      assert (H_k_1_mult: forall k, k * 1 = k).
+        induction k as [O | k'].
+        SCase "k = 0".
+          reflexivity. 
+        SCase "k = S k'".
+          simpl. rewrite IHk'. reflexivity.      
+      rewrite H_k_1_mult. 
+      reflexivity.
+Qed.
+
 
 (** **** Exercise: 2 stars, optional (evenb_n__oddb_Sn)  *)
 
