@@ -3,7 +3,7 @@
 
 (** The next line imports all of our definitions from the
     previous chapter. *)
-
+Add LoadPath ".".
 Require Export Basics.
 
 (** For it to work, you need to use [coqc] to compile [Basics.v]
@@ -457,10 +457,19 @@ Qed.
 Theorem evenb_n__oddb_Sn : forall n : nat,
   evenb n = negb (evenb (S n)).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n.
+  induction n as [O | n'].
+  Case "n = O".
+    reflexivity.
+  Case "n = S n'".
+    assert (H: evenb (S n') = negb (evenb n')).
+      rewrite IHn'. rewrite negation_fn_applied_twice. reflexivity. intros x. reflexivity.
+    rewrite H.
+    simpl.
+    reflexivity.
 (** [] *)
 
-(* ###################################################################### *)
+(* ################################################################## *)
 (** * More Exercises *)
 
 (** **** Exercise: 3 stars, optional (more_exercises)  *)
