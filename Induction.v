@@ -240,6 +240,7 @@ Proof.
     simpl. reflexivity.
   Case "n = S n'".
     simpl. rewrite IHn'. reflexivity.
+Qed.
 
 Theorem plus_n_Sm : forall n m : nat, 
   S (n + m) = n + (S m).
@@ -249,7 +250,7 @@ Proof.
     simpl. reflexivity. 
   Case "n = S n'". 
     simpl (plus). intros m. rewrite <- IHn'. reflexivity.  
-
+Qed.
 
 Theorem plus_comm : forall n m : nat,
   n + m = m + n.
@@ -261,6 +262,7 @@ Proof.
     intros m. simpl. rewrite IHn'.
     rewrite <- plus_n_Sm.
     reflexivity.
+Qed.
 
 Theorem plus_assoc : forall n m p : nat,
   n + (m + p) = (n + m) + p.
@@ -271,7 +273,7 @@ Proof.
     simpl. intros m p. reflexivity. 
   Case "n = S n'". 
     intros m p. simpl. rewrite IHn'. reflexivity.
-(** [] *)
+Qed.
 
 (** **** Exercise: 2 stars (double_plus)  *)
 
@@ -293,8 +295,7 @@ Proof.
     reflexivity.
   Case "n = S n'".
     simpl double. rewrite IHn'. simpl. rewrite plus_n_Sm. reflexivity.
-(** [] *)
-
+Qed.
 
 (** **** Exercise: 1 star (destruct_induction)  *)
 (** Briefly explain the difference between the tactics
@@ -380,7 +381,7 @@ Proof.
   intros n m p q.
   assert (H: n + m = m + n).
     Case "Proof of assertion".
-    rewrite -> plus_comm. reflexivity.
+      rewrite plus_comm. reflexivity.
   rewrite -> H. reflexivity.  Qed.
 
 (** **** Exercise: 4 stars (mult_comm)  *)
