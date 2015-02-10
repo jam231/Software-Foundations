@@ -597,8 +597,19 @@ Qed.
 Theorem plus_swap' : forall n m p : nat, 
   n + (m + p) = m + (n + p).
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros n.
+  induction n.
+  simpl. reflexivity.
+  intros m p. simpl. rewrite IHn.
+  replace (m + (S (n + p))) with (S (n + p) + m).
+  simpl. rewrite <- IHn. rewrite plus_assoc.
+  replace (n + m + p) with (n + p + m). reflexivity.
+  rewrite <- plus_comm.
+  rewrite plus_assoc.
+  replace (m + n) with (n + m). reflexivity.
+  rewrite plus_comm. reflexivity.
+  rewrite plus_comm. reflexivity.
+Qed. 
 
 
 (** **** Exercise: 3 stars (binary_commute)  *)
