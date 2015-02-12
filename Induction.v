@@ -467,6 +467,7 @@ Proof.
     rewrite H.
     simpl.
     reflexivity.
+Qed.
 (** [] *)
 
 (* ################################################################## *)
@@ -711,7 +712,8 @@ Qed.
 Theorem plus_assoc' : forall n m p : nat,
   n + (m + p) = (n + m) + p.
 Proof. intros n m p. induction n as [| n']. reflexivity. 
-  simpl. rewrite -> IHn'. reflexivity.  Qed.
+  simpl. rewrite -> IHn'. reflexivity.  
+Qed.
 
 (** Coq is perfectly happy with this as a proof.  For a human,
     however, it is difficult to make much sense of it.  If you're used
@@ -758,7 +760,8 @@ Proof.
   Case "n = 0".
     reflexivity. 
   Case "n = S n'".
-    simpl. rewrite -> IHn'. reflexivity.   Qed.
+    simpl. rewrite -> IHn'. reflexivity.  
+Qed.
 
 (** **** Exercise: 2 stars, advanced (plus_comm_informal)  *)
 (** Translate your solution for [plus_comm] into an informal proof. *)
