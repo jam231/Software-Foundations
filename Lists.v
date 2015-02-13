@@ -424,39 +424,73 @@ Qed.
 (** **** Exercise: 3 stars, optional (bag_more_functions)  *)
 (** Here are some more bag functions for you to practice with. *)
 
-Fixpoint remove_one (v:nat) (s:bag) : bag :=
-  (* When remove_one is applied to a bag without the number to remove,
-     it should return the same bag unchanged. *)
-  (* FILL IN HERE *) admit.
+Fixpoint remove_one (v:nat) (s:bag) : bag := 
+  match s with 
+  | nil => nil
+  | x :: t => if beq_nat x v then t else x :: remove_one v t
+  end.  
 
 Example test_remove_one1:         count 5 (remove_one 5 [2;1;5;4;1]) = 0.
- (* FILL IN HERE *) Admitted.
+Proof.
+  reflexivity.
+Qed.
 Example test_remove_one2:         count 5 (remove_one 5 [2;1;4;1]) = 0.
- (* FILL IN HERE *) Admitted.
+Proof.
+  reflexivity.
+Qed.
 Example test_remove_one3:         count 4 (remove_one 5 [2;1;4;5;1;4]) = 2.
- (* FILL IN HERE *) Admitted.
+Proof.
+  reflexivity.
+Qed.
 Example test_remove_one4:         count 5 (remove_one 5 [2;1;5;4;5;1;4]) = 1.
- (* FILL IN HERE *) Admitted.
+Proof.
+  reflexivity.
+Qed.
 
 Fixpoint remove_all (v:nat) (s:bag) : bag :=
-  (* FILL IN HERE *) admit.
+  match s with
+  | nil => nil
+  | x :: t => if beq_nat x v then remove_all v t else x :: remove_all v t
+  end. 
 
 Example test_remove_all1:          count 5 (remove_all 5 [2;1;5;4;1]) = 0.
- (* FILL IN HERE *) Admitted.
-Example test_remove_all2:          count 5 (remove_all 5 [2;1;4;1]) = 0.
- (* FILL IN HERE *) Admitted.
-Example test_remove_all3:          count 4 (remove_all 5 [2;1;4;5;1;4]) = 2.
- (* FILL IN HERE *) Admitted.
-Example test_remove_all4:          count 5 (remove_all 5 [2;1;5;4;5;1;4;5;1;4]) = 0.
- (* FILL IN HERE *) Admitted.
+Proof.
+  reflexivity.
+Qed.
 
-Fixpoint subset (s1:bag) (s2:bag) : bool :=
-  (* FILL IN HERE *) admit.
+Example test_remove_all2:          count 5 (remove_all 5 [2;1;4;1]) = 0.
+Proof.
+  reflexivity.
+Qed.
+
+Example test_remove_all3:          count 4 (remove_all 5 [2;1;4;5;1;4]) = 2.
+Proof.
+  reflexivity.
+Qed.
+
+Example test_remove_all4:          count 5 (remove_all 5 [2;1;5;4;5;1;4;5;1;4]) = 0.
+Proof.
+  simpl. reflexivity.
+Qed.
+
+
+Fixpoint subset (s1:bag) (s2:bag) : bool := 
+  match s1, s2 with
+  | nil, _ => true
+  | _, nil => false
+  | x :: t, s2 => if member x s2 then subset t (remove_all x s2) else false
+  end.
 
 Example test_subset1:              subset [1;2] [2;1;4;1] = true.
- (* FILL IN HERE *) Admitted.
+Proof.
+  simpl. reflexivity.
+Qed.
+
 Example test_subset2:              subset [1;2;2] [2;1;4;1] = false.
- (* FILL IN HERE *) Admitted.
+Proof.
+  simpl. reflexivity.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 3 stars (bag_theorem)  *)
