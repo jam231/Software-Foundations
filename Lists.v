@@ -500,8 +500,28 @@ Qed.
     with a theorem which is true, but whose proof requires techniques
     you haven't learned yet.  Feel free to ask for help if you get
     stuck! *)
+Theorem bag_count_add :
+  forall v n bag, count v bag = n -> count v (add v bag) = S n.
+Proof.
+  intros v n bag.
+  simpl. intros H.
+  rewrite H.
+  assert (forall m, beq_nat m m = true) as HH. 
+    induction m.
+      reflexivity.
+      simpl. rewrite IHm. reflexivity.
+  rewrite HH. apply plus_comm.
+Qed.
 
-(* FILL IN HERE *)
+Theorem bag_count_add2 :
+  forall v v' n bag, beq_nat v' v = false -> count v bag = n -> count v (add v' bag) = n.
+Proof.
+  intros v v' n bag.
+  simpl. intros H0 H1.
+  rewrite H1.
+  rewrite H0.
+  rewrite plus_0_r. reflexivity.
+Qed.
 (** [] *)
 
 (* ###################################################### *)
