@@ -1247,16 +1247,22 @@ Qed.
 (** Multiplication *)
 
 Definition mult (n m : nat) : nat := 
-  (* FILL IN HERE *) admit.
+     fun (X: Type) (f: X -> X) (x : X) => n X (m X f) x. 
 
 Example mult_1 : mult one one = one.
-Proof. (* FILL IN HERE *) Admitted.
+Proof.
+  unfold mult. unfold one. reflexivity.
+Qed.
 
 Example mult_2 : mult zero (plus three three) = zero.
-Proof. (* FILL IN HERE *) Admitted.
+Proof.
+  unfold mult. unfold zero. unfold three. reflexivity.
+Qed.
 
 Example mult_3 : mult two three = plus three three.
-Proof. (* FILL IN HERE *) Admitted.
+Proof.
+  unfold mult. unfold two. unfold three. reflexivity.
+Qed.
 
 (** Exponentiation *)
 
