@@ -279,9 +279,36 @@ Qed.
     in the proof of this one.)  You may find that [plus_swap] comes in
     handy. *)
 
-
+Lemma mult_n_O : forall n : nat, n * 0 = 0.
+Proof.
+  induction n.
+  - simpl. reflexivity.
+  - simpl. rewrite IHn. reflexivity.
+Qed.
 (* Introduce mult_plus_dist  *)
+Lemma mult_plus_dist :
+  forall m n p : nat, n * (m + p) = n * m + n * p.
+Proof.
+  intros m n p.
+  induction n.
+  + simpl. reflexivity. 
+  + simpl. rewrite IHn.
+    repeat (rewrite plus_assoc).
+    assert (m + p + n * m = m + n * m + p).
+    {  rewrite <- plus_assoc.
+       replace (p + n * m) with (n * m + p).
+       * rewrite plus_assoc. reflexivity.
+       * rewrite plus_comm. reflexivity.
+    }
+    rewrite H. reflexivity.
+Qed.
 
+Lemma mult_n_1 : forall n, n * 1 = n.
+Proof.
+  induction n.
+  - simpl. reflexivity.
+  - simpl. rewrite IHn. reflexivity.
+Qed. 
 
 Theorem mult_comm : forall m n : nat,
   m * n = n * m.
@@ -289,7 +316,16 @@ Proof.
   intros m n.
   induction m.
   - rewrite mult_0_r.
-    simpl. admit.
+    simpl.  reflexivity.
+  - simpl.
+    replace (S m) with (m + 1).
+    +  rewrite mult_plus_dist.
+       rewrite mult_n_1. rewrite plus_comm. rewrite IHm. 
+       reflexivity.
+    +  rewrite plus_comm. simpl. reflexivity.
+Qed.
+
+
 (** [] *)
 
 (** **** Exercise: 2 stars, optional (evenb_n__oddb_Sn)  *)
@@ -443,7 +479,7 @@ Proof.
       * reflexivity.
       * rewrite plus_comm.  reflexivity.
 Qed. 
-(* FILL IN HERE *)
+
 (** [] *)
 
 
@@ -473,20 +509,37 @@ Qed.
     here. 
 *)
 
+ 
 Fixpoint nat_to_bin (n : nat) :=
   match n with 
   | O   => zero
-  | S m => if even n then 
+  | S m => incr (nat_to_bin m) 
+end.
 
+Lemma bin_incr 
+  : forall b, bin_to_nat (incr b) = S (bin_to_nat b).
+Proof.
+  induction b.
+  - simpl. reflexivity.
+  - simpl. rewrite <- plus_n_O. 
+    rewrite plus_comm. simpl. reflexivity.
+  - simpl. repeat (rewrite <- plus_n_O). 
+    rewrite IHb. simpl.
+    replace (bin_to_nat b + bin_to_nat b + 1) with (bin_to_nat b + (1 + bin_to_nat b)).
+    + simpl. reflexivity.
+    + rewrite plus_assoc. rewrite plus_comm. rewrite plus_assoc. reflexivity.
+Qed.
 
 Theorem bin_to_nat_conversion : 
   forall n : nat, bin_to_nat (nat_to_bin n) = n.
 Proof.
- admit.
+ induction n.
+ + simpl. reflexivity.
+ + simpl. rewrite bin_incr. rewrite IHn. reflexivity.
 Qed.
 
 (* Answer to b:
-  Inductive definition of binary gives some natural numbers many representations.
+  Inductive definition of binary gives natural numbers many representations.
   Yet bin_to_nat doesn't preserve the information about the specific representation.
   For example
 
@@ -497,7 +550,78 @@ Qed.
     forall b : binary, nat_to_bin (bin_to_nat b) = b.
 *)
 
-(* FILL IN HERE *)
+
+Fixpoint normalize(b : bin) := 
+  match b with 
+  | zero       => zero
+  | twice zero => zero
+  | twice b'  => match normalize b' with
+                 | zero => zero
+                 | b'' => twice b''
+                 end
+  | twice_plus_one b'   => twice_plus_one (normalize b')
+end.
+
+Example normalize_1 : normalize (twice (twice zero)) = zero.
+Proof.
+  simpl. reflexivity.
+Qed.
+
+
+Example normalize_2 : normalize (twice_plus_one (twice (twice zero))) = twice_plus_one zero.
+Proof.
+  simpl. reflexivity.
+Qed.
+(*
+Lemma twice_nat_to_bin :
+ forall b : bin, nat_to_bin (bin_to_nat b + bin_to_nat b) = twice b.
+Proof.
+  induction b.
+  - simpl. reflexivity.
+  - 
+Qed.
+*)
+
+Lemma b1 :
+  forall b : bin, nat_to_bin (bin_to_nat b + bin_to_nat b) = normalize (twice (nat_to_bin (bin_to_nat b))).
+Proof.
+ admit.                                        
+Qed.
+
+Lemma b4 :
+  forall b : bin, nat_to_bin (bin_to_nat b + bin_to_nat b + 1) = normalize (twice_plus_one (nat_to_bin (bin_to_nat b))).
+Proof.
+ admit.                                                
+Qed.
+
+Lemma b2 :
+  forall b : bin, normalize (normalize b) = normalize b.
+Proof.
+ admit.                                        
+Qed.
+
+Lemma b3 :
+  forall b : bin, normalize (twice (normalize b)) = normalize (twice b).
+Proof.
+ admit.                                        
+Qed.
+
+Lemma b5 :
+  forall b : bin, normalize (twice_plus_one (normalize b)) = normalize (twice_plus_one b).
+Proof.
+ admit.                                        
+Qed.
+
+Theorem nat_to_bin_conversion : 
+  forall b : bin, nat_to_bin (bin_to_nat b) = normalize b.
+Proof. 
+  induction b.
+  - simpl. reflexivity.
+  - simpl bin_to_nat. rewrite <- plus_n_O.
+    rewrite b1. rewrite IHb. rewrite b3. reflexivity.
+  - simpl bin_to_nat. rewrite <- plus_n_O. 
+    rewrite b4. rewrite IHb. rewrite b5. reflexivity.
+Qed.
 (** [] *)
 
 (* ###################################################################### *)
