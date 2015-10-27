@@ -1270,21 +1270,25 @@ Qed.
     the right type to iterate over can be tricky. If you hit a
     "Universe inconsistency" error, try iterating over a different
     type: [nat] itself is usually problematic. *)
-
-Definition exp (n m : nat) : nat :=
-  (* FILL IN HERE *) admit.
-
+Definition exp (n m : nat) : nat := 
+  fun (X : Type) (f: X -> X) (x : X) => m (X -> X) (n X) f x.
+    
 Example exp_1 : exp two two = plus two two.
-Proof. (* FILL IN HERE *) Admitted.
+Proof.
+  unfold exp. unfold two. unfold plus. reflexivity.  
+Qed.
 
 Example exp_2 : exp three two = plus (mult two (mult two two)) one.
-Proof. (* FILL IN HERE *) Admitted.
+Proof.
+  unfold exp. unfold three. unfold two. unfold mult. unfold one. 
+  unfold plus. reflexivity.  
+Qed.
 
 Example exp_3 : exp three zero = one.
-Proof. (* FILL IN HERE *) Admitted.
-
+Proof.
+  unfold exp. unfold three. unfold one. unfold zero.  reflexivity.
+Qed.
 End Church.
-
 (** [] *)
 
 (** $Date: 2015-08-11 04:29:51 +0200 (Tue, 11 Aug 2015) $ *)
